@@ -1,52 +1,25 @@
-<div class="container py-4">
-  <h2>Dashboard Dipendente</h2>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  <section>
-    <h3>Eventi disponibili</h3>
-    <div *ngIf="loadingEvents">Caricamento eventi...</div>
-    <table class="table table-striped" *ngIf="events.length">
-      <thead>
-        <tr>
-          <th>Titolo</th>
-          <th>Data</th>
-          <th>Descrizione</th>
-          <th>Iscrizione</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let event of events">
-          <td>{{ event.title }}</td>
-          <td>{{ event.date | date:'shortDate' }}</td>
-          <td>{{ event.description }}</td>
-          <td>
-            <button class="btn btn-primary btn-sm" (click)="subscribe(event.id!)" [disabled]="isAlreadyRegistered(event.id!)">Iscriviti</button>
-            <span *ngIf="isSubscribed(event.id!)" class="text-success">Iscritto</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="!loadingEvents && !events.length" class="text-muted">Nessun evento disponibile.</div>
-  </section>
-  <section class="mt-4">
-    <h3>Le tue iscrizioni</h3>
-    <div *ngIf="loadingInscriptions">Caricamento iscrizioni...</div>
-    <table class="table table-bordered" *ngIf="inscriptions.length">
-      <thead>
-        <tr>
-          <th>Evento</th>
-          <th>Check-in</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ins of inscriptions">
-          <td>{{ getEventTitleFromIns(ins) }}</td>
-          <td>
-            <span *ngIf="ins.checkedIn" class="badge bg-success">Effettuato</span>
-            <span *ngIf="!ins.checkedIn" class="badge bg-secondary">Non effettuato</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="!loadingInscriptions && !inscriptions.length" class="text-muted">Nessuna iscrizione trovata.</div>
-  </section>
+<app-navbar></app-navbar>
+<div class="home-bg-img position-fixed top-0 start-0 w-100 h-100"></div>
+<div class="home-overlay d-flex flex-column align-items-center justify-content-center">
+  <div *ngIf="alertMsg" class="alert alert-{{alertType}} position-absolute top-0 start-50 translate-middle-x mt-4" style="z-index:10; min-width:300px; text-align:center;">
+    {{ alertMsg }}
+  </div>
+  <div class="row mb-4 justify-content-center w-100">
+    <div class="col-md-6 mb-3">
+      <button class="big-action-btn home-btn-iscrizione w-100" [disabled]="iscritto" (click)="!iscritto && iscrivi()">
+        <span class="action-text">
+          <ng-container *ngIf="iscritto; else iscriviti">Sei iscritto</ng-container>
+          <ng-template #iscriviti>Iscriviti a un torneo</ng-template>
+        </span>
+      </button>
+    </div>
+    <div class="col-md-6 mb-3">
+      <button class="big-action-btn home-btn-organizzazione w-100" [disabled]="user?.isOperator" (click)="!user?.isOperator && diventaOrganizzatore()">
+        <span class="action-text">
+          <ng-container *ngIf="user?.isOperator; else diventaOp">Sei organizzatore</ng-container>
+          <ng-template #diventaOp>Diventa operatore</ng-template>
+        </span>
+      </button>
+    </div>
+  </div>
 </div> 

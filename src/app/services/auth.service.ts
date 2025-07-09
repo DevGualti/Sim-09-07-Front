@@ -10,6 +10,7 @@ export interface User {
     email: string;
     password: string;
     isOperator: boolean;
+    iscritto?: boolean;
 }
 
 @Injectable({
@@ -19,7 +20,7 @@ export class AuthService {
     private _currentUser$ = new BehaviorSubject<User | null>(null);
     currentUser$ = this._currentUser$.asObservable();
 
-    conStr: string = "https://sim-17-06-back.onrender.com"
+    conStr: string = "http://localhost:3001"
 
     constructor(private jwtSrv: JwtService,
         private http: HttpClient,
@@ -47,11 +48,11 @@ export class AuthService {
     logout() {
         this.jwtSrv.removeToken();
         this._currentUser$.next(null);
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
     }
 
 
-    private fetchUser() {
+    public fetchUser() {
         this.http.get<User>(this.conStr + '/api/auth/me')
             .subscribe(user => this._currentUser$.next(user));
     }

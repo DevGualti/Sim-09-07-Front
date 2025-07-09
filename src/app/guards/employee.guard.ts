@@ -6,15 +6,12 @@ import { AuthService, User } from '../services/auth.service';
 export class EmployeeGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
   canActivate(): boolean {
-    let allowed = false;
-    // Recupera l'utente corrente dal BehaviorSubject
+    // Permetti l'accesso a tutti gli utenti autenticati
     const user = (this.auth as any)._currentUser$.getValue() as User | null;
-    if (user && !user.isOperator) {
-      allowed = true;
+    if (user) {
+      return true;
     }
-    if (!allowed) {
-      this.router.navigate(['/login']);
-    }
-    return allowed;
+    this.router.navigate(['/login']);
+    return false;
   }
 } 
