@@ -20,7 +20,7 @@ export class AuthService {
     private _currentUser$ = new BehaviorSubject<User | null>(null);
     currentUser$ = this._currentUser$.asObservable();
 
-    conStr: string = "http://localhost:3001"
+    conStr: string = "https://mirko-gualtiero-ping-pong-backend.onrender.com"
 
     constructor(private jwtSrv: JwtService,
         private http: HttpClient,
