@@ -1,0 +1,52 @@
+<div class="container py-4">
+  <h2>Dashboard Dipendente</h2>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <section>
+    <h3>Eventi disponibili</h3>
+    <div *ngIf="loadingEvents">Caricamento eventi...</div>
+    <table class="table table-striped" *ngIf="events.length">
+      <thead>
+        <tr>
+          <th>Titolo</th>
+          <th>Data</th>
+          <th>Descrizione</th>
+          <th>Iscrizione</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>{{ event.title }}</td>
+          <td>{{ event.date | date:'shortDate' }}</td>
+          <td>{{ event.description }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="subscribe(event.id!)" [disabled]="isAlreadyRegistered(event.id!)">Iscriviti</button>
+            <span *ngIf="isSubscribed(event.id!)" class="text-success">Iscritto</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loadingEvents && !events.length" class="text-muted">Nessun evento disponibile.</div>
+  </section>
+  <section class="mt-4">
+    <h3>Le tue iscrizioni</h3>
+    <div *ngIf="loadingInscriptions">Caricamento iscrizioni...</div>
+    <table class="table table-bordered" *ngIf="inscriptions.length">
+      <thead>
+        <tr>
+          <th>Evento</th>
+          <th>Check-in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ins of inscriptions">
+          <td>{{ getEventTitleFromIns(ins) }}</td>
+          <td>
+            <span *ngIf="ins.checkedIn" class="badge bg-success">Effettuato</span>
+            <span *ngIf="!ins.checkedIn" class="badge bg-secondary">Non effettuato</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loadingInscriptions && !inscriptions.length" class="text-muted">Nessuna iscrizione trovata.</div>
+  </section>
+</div> 
